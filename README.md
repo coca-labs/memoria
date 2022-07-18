@@ -56,17 +56,17 @@ pub struct Role {
 
 ```rust
 let g = Group {
-    name: "creator",
+    name: "creator".to_owned(),
 };
 memoria::save_or_update(g)?;
 
 let r1 = Role {
-    name: "data viewer",
+    name: "data viewer".to_owned(),
 };
 memoria::save_or_update(r1)?;
 
 let r2 = Role {
-    name: "data modifier",
+    name: "data modifier".to_owned(),
 };
 memoria::save_or_update(r2)?;
 
