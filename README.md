@@ -79,7 +79,7 @@ memoria::save(u)?;
 ### Data queries
 
 ```rust
-let v: Vec<User> = memoria::find_vec(|r| r.name == "clia").await?;
+let v: Vec<User> = memoria::find_vec(|d| d.name == "clia").await?;
 
 if v.len() > 0 {
     let u = v[0];
