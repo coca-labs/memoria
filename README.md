@@ -24,7 +24,7 @@ pub struct User {
     #[field(MAX_VAL=200)]
     pub age: u16,
     pub gender: Gender,
-    pub group: Group,
+    pub group: Option<Group>,
     #[field(MIN_LEN=1)]
     pub roles: Vec<Role>,
 }
@@ -74,7 +74,7 @@ let u = User {
     name: "clia".to_owned(),
     age: 24,
     gender: Gender::Male,
-    group: g,
+    group: Some(g),
     roles: vec![r1, r2],
 };
 memoria::save(u)?;
