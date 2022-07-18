@@ -71,7 +71,18 @@ let u = User {
 };
 memoria::save(u)?;
 
-let mut u: User = memoria::get_mut(u.id());
+let mut u: User = memoria::get_mut(u.id()).await?;
 u.age = 36;
 memoria::save(u)?;
+```
+
+### Data queries
+
+```rust
+let v: Vec<User> = memoria::find_vec(|r| r.name == "clia").await?;
+
+if v.len() == 1 {
+    let u = v[0];
+    println!("user clia's age: {}", u.age);
+}
 ```
