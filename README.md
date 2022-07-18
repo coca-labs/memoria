@@ -58,17 +58,17 @@ pub struct Role {
 let g = Group {
     name: "creator",
 };
-memoria::save(g)?;
+memoria::save_or_update(g)?;
 
 let r1 = Role {
     name: "data viewer",
 };
-memoria::save(r1)?;
+memoria::save_or_update(r1)?;
 
 let r2 = Role {
     name: "data modifier",
 };
-memoria::save(r2)?;
+memoria::save_or_update(r2)?;
 
 let u = User {
     name: "clia".to_owned(),
