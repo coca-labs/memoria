@@ -79,7 +79,7 @@ let u = User {
 };
 memoria::save(u)?;
 
-let mut u: User = memoria::get_mut(u.id()).await?;
+let mut u: User = memoria::get_mut(u.memoria_id()).await?;
 u.age = 36;
 memoria::save(u)?;
 ```
