@@ -14,32 +14,40 @@ A database with simplicity.
 ### Define data structures
 
 ```rust
-use memoria::Data;
+use memoria::{Data, field, variant};
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct User {
+    #[field(UNIQUE, MAX_LEN=20)]
     pub name: String,
+    #[field(MAX_VAL=200)]
     pub age: u16,
     pub gender: Gender,
     pub group: Group,
+    #[field(MIN_LEN=1)]
     pub roles: Vec<Role>,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub enum Gender {
+    #[variant(VAL="male")]
     Male,
+    #[variant(VAL="female")]
     Female,
+    #[variant(VAL="other")]
     Other,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Group {
+    #[field(UNIQUE)]
     pub name: String,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Role {
+    #[field(UNIQUE)]
     pub name: String,
 }
 ```
@@ -50,17 +58,17 @@ pub struct Role {
 let g = Group {
     name: "creator",
 };
-memoria::save_unique(g, "name")?;
+memoria::save(g)?;
 
 let r1 = Role {
     name: "data viewer",
 };
-memoria::save_unique(r1, "name")?;
+memoria::save(r1)?;
 
 let r2 = Role {
     name: "data modifier",
 };
-memoria::save_unique(r2, "name")?;
+memoria::save(r2)?;
 
 let u = User {
     name: "clia".to_owned(),
