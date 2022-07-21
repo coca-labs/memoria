@@ -14,7 +14,7 @@ A database with simplicity.
 ### Define data structures
 
 ```rust
-use memoria::{Data, field, variant};
+use memoria::{Data, Ref, field, variant};
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
@@ -23,10 +23,10 @@ pub struct User {
     pub name: String,
     #[field(MAX_VAL=200)]
     pub age: u16,
-    pub gender: Gender,
-    pub group: Option<Group>,
+    pub gender: Ref<Gender>,
+    pub group: Option<Ref<Group>>,
     #[field(MIN_LEN=1)]
-    pub roles: Vec<Role>,
+    pub roles: Vec<Ref<Role>>,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
@@ -73,9 +73,9 @@ memoria::save_or_update(r2)?;
 let u = User {
     name: "clia".to_owned(),
     age: 24,
-    gender: Gender::Male,
-    group: Some(g),
-    roles: vec![r1, r2],
+    gender: Gender::Male.ref(),
+    group: Some(g.ref()),
+    roles: vec![r1.ref(), r2.ref()],
 };
 memoria::save(u)?;
 
@@ -91,6 +91,6 @@ let v: Vec<User> = memoria::find_vec(|r| r.name == "clia").await?;
 
 if v.len() > 0 {
     let u = v[0];
-    println!("user clia's age: {}", u.age);
+    println!("user clia's age: {}, gender: {}", u.age, u.gender.val());
 }
 ```
