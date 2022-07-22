@@ -59,17 +59,17 @@ pub struct Role {
 let g = Group {
     name: "creator".to_owned(),
 };
-memoria::save_or_update(g)?;
+memoria::save_or_update(g).await?;
 
 let r1 = Role {
     name: "data viewer".to_owned(),
 };
-memoria::save_or_update(r1)?;
+memoria::save_or_update(r1).await?;
 
 let r2 = Role {
     name: "data modifier".to_owned(),
 };
-memoria::save_or_update(r2)?;
+memoria::save_or_update(r2).await?;
 
 let u = User {
     name: "clia".to_owned(),
@@ -78,11 +78,11 @@ let u = User {
     group: Some(g.ref()),
     roles: vec![r1.ref(), r2.ref()],
 };
-memoria::save(u)?;
+memoria::save(u).await?;
 
 let mut u: User = memoria::get_mut(u.memoria_id()).await?;
 u.age = 36;
-memoria::save(u)?;
+memoria::save(u).await?;
 ```
 
 ### Data queries
