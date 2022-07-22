@@ -92,6 +92,6 @@ let v: Vec<User> = memoria::find_vec(|r| r.name == "clia").await?;
 
 if v.len() > 0 {
     let u = v[0];
-    println!("user clia's age: {}, gender: {}", u.age, u.gender.val());
+    println!("user clia's age: {}, gender: {}", u.age, u.gender.val().await?);
 }
 ```
