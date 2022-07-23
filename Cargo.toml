@@ -3,6 +3,13 @@ name = "memoria"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[[bin]]
+name = "memoria-server"
+path = "bin/server.rs"
+
+[lib]
+name = "memoria"
+path = "src/lib.rs"
 
 [dependencies]
+ntex = { version = "0.5", features = ["tokio", "rustls"] }
