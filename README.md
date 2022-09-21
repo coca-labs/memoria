@@ -56,20 +56,20 @@ pub struct Role {
 ### Data operations
 
 ```rust
-let mut g = Group {
+let g = Group {
     name: "creator".to_owned(),
 };
-memoria::save_or_update(&mut g).await?;
+g.sync().await?;
 
-let mut r1 = Role {
+let r1 = Role {
     name: "data viewer".to_owned(),
 };
-memoria::save_or_update(&mut r1).await?;
+r1.sync().await?;
 
-let mut r2 = Role {
+let r2 = Role {
     name: "data modifier".to_owned(),
 };
-memoria::save_or_update(&mut r2).await?;
+r2.sync().await?;
 
 let mut u = User {
     name: "clia".to_owned(),
@@ -78,11 +78,10 @@ let mut u = User {
     group: Some(g.ref()),
     roles: vec![r1.ref(), r2.ref()],
 };
-memoria::save(&mut u).await?;
+u.sync().await?;
 
-let mut u: User = memoria::get_mut(u.memoria_id()).await?;
 u.age = 36;
-memoria::save(&mut u).await?;
+u.sync().await?;
 ```
 
 ### Data queries
