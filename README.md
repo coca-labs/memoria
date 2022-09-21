@@ -20,35 +20,35 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct User {
-    #[field(UNIQUE, MAX_LEN=20)]
+    #[field(unique, max_len = 20)]
     pub name: String,
-    #[field(MAX_VAL=200)]
+    #[field(max_val = 200)]
     pub age: u16,
     pub gender: Ref<Gender>,
     pub group: Option<Ref<Group>>,
-    #[field(MIN_LEN=1)]
+    #[field(min_len = 1)]
     pub roles: Vec<Ref<Role>>,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub enum Gender {
-    #[variant(VAL="male")]
+    #[variant(val = "male")]
     Male,
-    #[variant(VAL="female")]
+    #[variant(val = "female")]
     Female,
-    #[variant(VAL="other")]
+    #[variant(val = "other")]
     Other,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Group {
-    #[field(UNIQUE)]
+    #[field(unique)]
     pub name: String,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Role {
-    #[field(UNIQUE)]
+    #[field(unique)]
     pub name: String,
 }
 ```
