@@ -14,16 +14,62 @@ A database with simplicity.
 
 ### Define data structures
 
+#### Method 1: Using memoria files
+
+`user.memoria`
+
 ```rust
-use memoria::{Data, Ref, field, variant};
+struct User {
+    id: Id,
+    name: String (unique, max_len = 20),
+    birth: Date (max_val = today()),
+    gender: Ref<Gender>,
+    group: Option<Ref<Group>>,
+    roles: Vec<Ref<Role>> (min_len = 1),
+}
+```
+
+`gender.memoria`
+
+```rust
+enum Gender {
+    Male (val = "male"),
+    Female (val = "female"),
+    Other (val = "other"),
+}
+```
+
+`group.memoria`
+
+```rust
+struct Gourp {
+    id: Id,
+    name: String (unique, max_len = 20),
+}
+```
+
+`role.memoria`
+
+```rust
+struct Role {
+    id: Id,
+    name: String (unique, max_len = 20),
+}
+```
+
+#### Method 2: Using `proc_macro`
+
+```rust
+use memoria::{Data, Ref, Id, Date, field, variant};
 use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct User {
+    pub id: Id,
     #[field(unique, max_len = 20)]
     pub name: String,
-    #[field(max_val = 200)]
-    pub age: u16,
+    #[field(max_val = today())]
+    pub birth: Date,
     pub gender: Ref<Gender>,
     pub group: Option<Ref<Group>>,
     #[field(min_len = 1)]
@@ -42,13 +88,15 @@ pub enum Gender {
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Group {
-    #[field(unique)]
+    pub id: Id,
+    #[field(unique, max_len = 20)]
     pub name: String,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct Role {
-    #[field(unique)]
+    pub id: Id,
+    #[field(unique, max_len = 20)]
     pub name: String,
 }
 ```
@@ -57,21 +105,25 @@ pub struct Role {
 
 ```rust
 let g = Group {
+    id: memoria::id(),
     name: "creator".to_owned(),
 };
 g.sync().await?;
 
 let r1 = Role {
+    id: memoria::id(),
     name: "data viewer".to_owned(),
 };
 r1.sync().await?;
 
 let r2 = Role {
+    id: memoria::id(),
     name: "data modifier".to_owned(),
 };
 r2.sync().await?;
 
 let mut u = User {
+    id: memoria::id(),
     name: "clia".to_owned(),
     age: 24,
     gender: Gender::Male.ref(),
