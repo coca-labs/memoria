@@ -42,18 +42,19 @@ enum Gender {
 `group.memoria`
 
 ```rust
-struct Gourp {
-    id: Id,
-    name: String (unique, max_len = 20),
+enum Gourp {
+    Architect (val = "architect"),
+    Developer (val = "developer"),
+    Designer (val = "designer"),
 }
 ```
 
 `role.memoria`
 
 ```rust
-struct Role {
-    id: Id,
-    name: String (unique, max_len = 20),
+enum Role {
+    DataViewer (val = "data viewer"),
+    DataModifier (val = "data modifier"),
 }
 ```
 
@@ -87,48 +88,34 @@ pub enum Gender {
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
-pub struct Group {
-    pub id: Id,
-    #[field(unique, max_len = 20)]
-    pub name: String,
+pub enum Group {
+    #[variant(val = "architect")]
+    Architect,
+    #[variant(val = "developer")]
+    Developer,
+    #[variant(val = "designer")]
+    Designer,
 }
 
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
-pub struct Role {
-    pub id: Id,
-    #[field(unique, max_len = 20)]
-    pub name: String,
+pub enum Role {
+    #[variant(val = "data viewer")]
+    DataViewer,
+    #[variant(val = "data modifier")]
+    DataModifier,
 }
 ```
 
 ### Data operations
 
 ```rust
-let g = Group {
-    id: memoria::id(),
-    name: "creator".to_owned(),
-};
-g.sync().await?;
-
-let r1 = Role {
-    id: memoria::id(),
-    name: "data viewer".to_owned(),
-};
-r1.sync().await?;
-
-let r2 = Role {
-    id: memoria::id(),
-    name: "data modifier".to_owned(),
-};
-r2.sync().await?;
-
 let mut u = User {
     id: memoria::id(),
     name: "clia".to_owned(),
     age: 24,
     gender: Gender::Male.ref(),
-    group: Some(g.ref()),
-    roles: vec![r1.ref(), r2.ref()],
+    group: Some(Group::Architect.ref()),
+    roles: vec![Role::DataViewer.ref(), Role::DataModifier.ref()],
 };
 u.sync().await?;
 
