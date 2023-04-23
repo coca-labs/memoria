@@ -9,6 +9,7 @@ A database with simplicity.
 1. Embedded, executed in one thread.
 1. Support all Rust std collection types.
 1. Support time dimension migrations.
+1. Implement data and program fusion.
 
 ## Examples
 
