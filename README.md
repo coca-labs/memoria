@@ -110,24 +110,47 @@ pub enum Role {
 ### Data operations
 
 ```rust
-let mut u = User {
-    id: memoria::id(),
+let user_store = memoria::hash_map::<User>().await?;
+
+let id = User::id();
+
+// Create data
+user_store.insert(id.clone(), User {
+    id: id.clone(),
     name: "clia".to_owned(),
     age: 24,
     gender: Gender::Male.ref(),
     group: Some(Group::Architect.ref()),
     roles: vec![Role::DataViewer.ref(), Role::DataModifier.ref()],
-};
-u.sync().await?;
+}).await?;
 
-u.age = 36;
-u.sync().await?;
+// Modify data
+{
+    let mut m = user_store.get_mut(&id).await?.unwrap();
+    m.gender = Gender::Female.ref();
+    m.sync().await?;
+}
+
+// Modify data, using transaction
+{
+    let mut m = User::borrow_mut(&id).await?;
+    m.tx(|| {
+        m.name = "foo".to_owned();
+        m.age = 36;
+    }).await?;
+}
+
+// Fetch data
+let u2 = user_store.get(&id).await?.clone();
+
+// Delete data
+user_store.remove(&id).await?;
 ```
 
 ### Data queries
 
 ```rust
-let v: Vec<User> = memoria::find_vec(|r| r.name == "clia").await?;
+let v = user_store.iter().filter(|u| u.name == "clia").collect().await?;
 
 for u in v {
     println!("user clia's age: {}, gender: {}", u.age, u.gender.val().await?);
