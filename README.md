@@ -133,7 +133,7 @@ user_store.insert(id.clone(), User {
 
 // Modify data, using transaction
 {
-    let mut m = User::borrow_mut(&id).await?;
+    let mut m = user_store.get_mut(&id).await?.unwrap();
     m.tx(|| {
         m.name = "foo".to_owned();
         m.age = 36;
