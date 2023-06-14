@@ -126,6 +126,7 @@ user_store.insert(id.clone(), User {
 
 // Modify data
 {
+    // Lock data and release it fastly.
     let mut m = user_store.get_mut(&id).await?.unwrap();
     m.gender = Gender::Female.ref();
     m.sync().await?;
@@ -141,7 +142,8 @@ user_store.insert(id.clone(), User {
 }
 
 // Fetch data
-let u2 = user_store.get(&id).await?.clone();
+// Make a free state copy.
+let u2 = user_store.get(&id).await?.unwrap().clone();
 
 // Delete data
 user_store.remove(&id).await?;
