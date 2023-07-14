@@ -5,11 +5,12 @@ A database with simplicity.
 ## Features
 
 1. Written in Rust.
-1. Memory -> SSD -> HDD, three level storage.
+1. Memory (Hot) -> SSD (Warm) -> HDD (Cold), three level storage.
 1. Embedded, executed in one thread.
 1. Support all Rust std collection types.
 1. Support time dimension migrations.
 1. Implement data and program fusion.
+1. Streamed queries, for microsecond-level to nanosecond-level respond time.
 
 ## Examples
 
@@ -152,9 +153,9 @@ user_store.remove(&id).await?;
 ### Data queries
 
 ```rust
-let v = user_store.iter().filter(|u| u.name == "clia").collect().await?;
+let s = user_store.iter().filter(|u| u.name == "clia").collect().await?;
 
-for u in v {
+while let Some(u) = s.next().await {
     println!("user clia's age: {}, gender: {}", u.age, u.gender.val().await?);
 }
 ```
