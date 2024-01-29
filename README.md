@@ -66,43 +66,74 @@ enum Role {
 use memoria::{Data, Ref, Id, Date, field, variant};
 use serde::{Serialize, Deserialize};
 
+/// User entity.
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub struct User {
+    /// User ID.
+    #[field(pk)]
     pub id: Id,
+
+    /// User name.
     #[field(unique, max_len = 20)]
     pub name: String,
+
+    /// User birth date.
     #[field(max_val = today())]
     pub birth: Date,
+
+    /// User gender.
+    #[field]
     pub gender: Ref<Gender>,
+
+    /// User group.
+    #[field]
     pub group: Option<Ref<Group>>,
+
+    /// User roles.
     #[field(min_len = 1)]
     pub roles: Vec<Ref<Role>>,
 }
 
+/// Gender enum.
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub enum Gender {
+    /// Male gender.
     #[variant(val = "male")]
     Male,
+
+    /// Female gender.
     #[variant(val = "female")]
     Female,
+
+    /// Other gender.
     #[variant(val = "other")]
     Other,
 }
 
+/// Group enum.
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub enum Group {
+    /// Architect group.
     #[variant(val = "architect")]
     Architect,
+
+    /// Developer group.
     #[variant(val = "developer")]
     Developer,
+
+    /// Designer group.
     #[variant(val = "designer")]
     Designer,
 }
 
+/// Role enum.
 #[derive(Debug, Clone, Data, Serialize, Deserialize)]
 pub enum Role {
+    /// Data viewer role.
     #[variant(val = "data viewer")]
     DataViewer,
+
+    /// Data modifier role.
     #[variant(val = "data modifier")]
     DataModifier,
 }
